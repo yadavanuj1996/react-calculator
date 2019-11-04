@@ -7,6 +7,12 @@ body,html{
   width: 100%;
   background: linear-gradient(135deg,#f87da0,#6f6eb4);
 }
+#main-holder{
+  height: inherit;
+  width: inherit;
+  margin-right: 0;
+  margin-left: 0;
+}
 #display{
   background-color: $theme-color;
   color: #ffffff;

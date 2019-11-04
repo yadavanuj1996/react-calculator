@@ -36,7 +36,7 @@ class CalcTopElements extends React.Component{
   }
   render(){
     return (
-      <div class="row w-100 ">  
+      <div className="row w-100 ">  
          <div className="text-center theme-bg-color w-50 calc-btn-height  calc-btn-border calc-content-layout" id="clear">
           AC
         </div>
@@ -76,7 +76,7 @@ class CalcBottomElements extends React.Component{
   }
   render(){
     return (
-      <div class="row w-100 ">  
+      <div className="row w-100 ">  
          <div className="text-center theme-bg-color w-50 calc-btn-height  calc-btn-border calc-content-layout" id="zero">
           0
         </div>

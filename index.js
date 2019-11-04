@@ -37,13 +37,13 @@ class CalcTopElements extends React.Component{
   render(){
     return (
       <div class="row w-100 ">  
-         <div className="text-center theme-bg-color w-50 calc-btn-height  calc-btn-border calc-content-layout" id="zero">
+         <div className="text-center theme-bg-color w-50 calc-btn-height  calc-btn-border calc-content-layout" id="clear">
           AC
         </div>
-        <div className="text-center theme-bg-color w-25 calc-btn-height  calc-btn-border calc-content-layout" id="decimal">
+        <div className="text-center theme-bg-color w-25 calc-btn-height  calc-btn-border calc-content-layout" id="backspace">
           &#9003;
         </div>
-        <div className="text-center theme-bg-color w-25 calc-btn-height  calc-btn-border calc-content-layout" id="equals">
+        <div className="text-center theme-bg-color w-25 calc-btn-height  calc-btn-border calc-content-layout" id="divide">
           /
         </div>
       </div>
@@ -55,7 +55,7 @@ class CalcMiddleElements extends React.Component{
     super(props);
   }
   render(){
-     let digits=[{7:"seven"},{8:"eight"},{9:"nine"},{x: "multiply"},{4:"four"},{5:"five"},{6:"six"},{"-": "minus"},{1: "one"},{2:"two"},{3:"three"},{"+": "minus"}];
+     let digits=[{7:"seven"},{8:"eight"},{9:"nine"},{x: "multiply"},{4:"four"},{5:"five"},{6:"six"},{"-": "subtract"},{1: "one"},{2:"two"},{3:"three"},{"+": "add"}];
     let digitDiv=digits.map((element)=>{
       return(
         <div className="text-center theme-bg-color w-25 calc-btn-height  calc-btn-border calc-content-layout" id={`${element[Object.keys(element)[0]]}`}>
@@ -64,7 +64,9 @@ class CalcMiddleElements extends React.Component{
       );
     });
     return (
-      <div class="row justify-contente-center w-100 h-100">{digitDiv}</div>
+      <div className="row justify-content-center w-100 h-100"> 
+           {digitDiv}
+      </div>
     );
   }
 }

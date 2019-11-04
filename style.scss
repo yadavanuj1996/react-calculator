@@ -3,6 +3,7 @@ $theme-keypad-color: #3d3240;
 
 body,html{
   min-height: 100vh;
+  height: 100%;
   width: 100%;
   background: linear-gradient(135deg,#f87da0,#6f6eb4);
 }
@@ -19,6 +20,7 @@ body,html{
   color: #ffffff;
 }
 .container{
+  height: 100vh;
   padding-right: 0;
   padding-left: 0;
   display: flex;

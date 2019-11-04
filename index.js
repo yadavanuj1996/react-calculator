@@ -28,12 +28,14 @@ class CalcNumbers extends React.Component{
     });
     return (
       <div className="row w-100 justify-content-center">
+      <CalcTopElements/>
       {digitDiv}
       <CalcBottomElements/>
       </div>
     );
   }
 }
+
 class CalcBottomElements extends React.Component{
   constructor(props){
     super(props);
@@ -54,4 +56,25 @@ class CalcBottomElements extends React.Component{
     );
   }
 }
+class CalcTopElements extends React.Component{
+  constructor(props){
+    super(props);
+  }
+  render(){
+    return (
+      <div class="row w-100 ">  
+         <div className="text-center theme-bg-color w-50 calc-btn-height  calc-btn-border calc-content-layout" id="zero">
+          AC
+        </div>
+        <div className="text-center theme-bg-color w-25 calc-btn-height  calc-btn-border calc-content-layout" id="decimal">
+          &#9003;
+        </div>
+        <div className="text-center theme-bg-color w-25 calc-btn-height  calc-btn-border calc-content-layout" id="equals">
+          /
+        </div>
+      </div>
+    );
+  }
+}
+
 ReactDOM.render(<Calculator/>,document.getElementById("keypad"));

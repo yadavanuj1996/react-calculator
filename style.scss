@@ -4,6 +4,7 @@ $theme-keypad-color: #3d3240;
 body,html{
   min-height: 100vh;
   width: 100%;
+  background: linear-gradient(135deg,#f87da0,#6f6eb4);
 }
 #display{
   background-color: $theme-color;
@@ -25,7 +26,7 @@ body,html{
   justify-content: center;
 }
 #calc{
-  width: 20%;
+  width: 60%;
 }
 .calc-btn-height{
   min-height: 50px;
@@ -39,3 +40,7 @@ body,html{
   justify-content:center;
   align-items: center;
 }
+.calc-content-layout:hover{
+  background-color: #8a6d92;
+}
+

@@ -2,19 +2,38 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.scss';
+import {createStore} from 'redux';
+import {connect} from 'react-redux';
+import {Provider} from 'react-redux';
 
 class Calculator extends React.Component{
   constructor(props){
     super(props);
     this.state={expression:'0'};
     this.handleClick=this.handleClick.bind(this);
+    this.showResults=this.showResults.bind(this);
   }
   handleClick(event){
     let clickedButton=document.getElementById(event.target.id).innerHTML;
+    switch(clickedButton.toString()){
+      case 'AC': this.setState({expression: '0'});return;
+      case '⌫':  this.setState({expression: this.state.expression.substring(0,this.state.expression.length-1) });
+                return;
+      case '=': this.showResults();
+                return;
+    }
     if(this.state.expression==0)
       this.setState({expression: `${clickedButton}`});
     else
       this.setState({expression: `${this.state.expression}${clickedButton}`});
+  }
+  showResults(){
+    this.props.submitExpression(this.state.expression); 
+    setTimeout(()=>{
+      console.log(this.props);
+      this.setState({expression: `${this.props.reduxValue.result}`});
+    },100);
+   
   }
   render(){
     return(
@@ -46,7 +65,7 @@ class CalcTopElements extends React.Component{
   render(){
     return (
       <div className="row w-100 ">  
-         <div id="display" class="row w-100 justify-content-end align-items-center">{this.props.expression}</div>
+         <div id="display" className="row w-100 justify-content-end align-items-center">{this.props.expression}</div>
          <div className="text-center theme-bg-color w-50 calc-btn-height  calc-btn-border calc-content-layout" id="clear" onClick={this.props.handleClick}>
           AC
         </div>
@@ -102,4 +121,52 @@ class CalcBottomElements extends React.Component{
   }
 }
 
-ReactDOM.render(<Calculator/>,document.getElementById("keypad"));
+//ReactDOM.render(<Calculator/>,document.getElementById("keypad"));
+
+//Redux Code
+//Action Creator
+const addExpression=(expression)=>{
+  return {
+    type: 'expressionCalculation',
+    expression: expression
+  }
+}
+const DEFAULT_STATE={expression:'0',result: 0};
+const reducer=(state=DEFAULT_STATE,action)=>{
+  if(action.type==="expressionCalculation"){
+    return {expression:'1',result: 1};
+  }
+  else{
+    return DEFAULT_STATE;
+  }
+
+};
+
+const store=createStore(reducer);
+
+
+const mapStateToProps = (state) => {
+  return {reduxValue: state}
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    submitExpression: (expression) => {
+      dispatch(addExpression(expression))
+    }
+  }
+};
+
+
+const Container = connect(mapStateToProps, mapDispatchToProps)(Calculator);
+
+class AppWrapper extends React.Component {
+  render() {
+    return (
+      <Provider store={store}>
+	      <Container/>
+      </Provider>
+    );
+  }
+};
+ReactDOM.render(<AppWrapper/>,document.getElementById("keypad"));

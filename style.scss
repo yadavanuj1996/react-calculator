@@ -50,5 +50,13 @@ body,html{
 }
 .calc-content-layout:hover{
   background-color: #8a6d92;
+  cursor: pointer;
+  /* To make text unselectable for copying or other purposes*/
+  -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 

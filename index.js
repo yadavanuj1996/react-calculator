@@ -11,11 +11,14 @@ class Calculator extends React.Component{
   }
   handleClick(event){
     let clickedButton=document.getElementById(event.target.id).innerHTML;
-    this.state.expression=`${this.state.expression}${clickedButton}`;
+    if(this.state.expression==0)
+      this.setState({expression: `${clickedButton}`});
+    else
+      this.setState({expression: `${this.state.expression}${clickedButton}`});
   }
   render(){
     return(
-      <CalcNumbers handleClick={this.handleClick}/>
+      <CalcNumbers expression={this.state.expression} handleClick={this.handleClick}/>
     );
   }
 }
@@ -28,7 +31,7 @@ class CalcNumbers extends React.Component{
    
     return (
       <div className="row w-100 justify-content-center">
-      <CalcTopElements handleClick={this.props.handleClick}/>
+      <CalcTopElements expression={this.props.expression} handleClick={this.props.handleClick}/>
       <CalcMiddleElements handleClick={this.props.handleClick}/>
       <CalcBottomElements handleClick={this.props.handleClick}/>
       </div>
@@ -43,6 +46,7 @@ class CalcTopElements extends React.Component{
   render(){
     return (
       <div className="row w-100 ">  
+         <div id="display" class="row w-100 justify-content-end align-items-center">{this.props.expression}</div>
          <div className="text-center theme-bg-color w-50 calc-btn-height  calc-btn-border calc-content-layout" id="clear" onClick={this.props.handleClick}>
           AC
         </div>

@@ -23,10 +23,13 @@ class Calculator extends React.Component{
       case '=': this.showResults();
                 return;
     }
-    if(this.state.expression==0)
+    if(this.state.expression==0 && !this.isInputCharacterSymbol(clickedButton))
       this.setState({expression: `${clickedButton}`});
-    else
+    else 
       this.setState({expression: `${this.state.expression}${clickedButton}`});
+  }
+  isInputCharacterSymbol(inputChar){
+    return /[\+\-\x\/.]/.test(inputChar);
   }
   showResults(){
     this.evaluateExpression();

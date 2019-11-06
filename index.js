@@ -17,7 +17,8 @@ class Calculator extends React.Component{
     let clickedButton=document.getElementById(event.target.id).innerHTML;
     switch(clickedButton.toString()){
       case 'AC': this.setState({expression: '0'});return;
-      case '⌫':  this.setState({expression: this.state.expression.substring(0,this.state.expression.length-1) });
+      case '⌫':  this.setState({expression: this.state.expression.substring(0,this.state.
+      expression.length-1) });
                 return;
       case '=': this.showResults();
                 return;
@@ -28,12 +29,55 @@ class Calculator extends React.Component{
       this.setState({expression: `${this.state.expression}${clickedButton}`});
   }
   showResults(){
+    this.evaluateExpression();
     this.props.submitExpression(this.state.expression); 
-    setTimeout(()=>{
-      console.log(this.props);
-      this.setState({expression: `${this.props.reduxValue.result}`});
-    },100);
-   
+  }
+  evaluateExpression(){
+    var numRegExp = /(\d+[.]\d+)|(\d+)/g;
+    var symbolsRegExp=/[\+\-\x\/]/g;
+    var regString = this.state.expression;
+    
+
+    var numbers=(regString.match(numRegExp));
+    var symbols=(regString.match(symbolsRegExp));
+
+    for(let i=0;i<symbols.length;i++){
+      if(symbols[i]==='/'){
+        symbols.splice(i,1);
+        let firstNo=parseFloat(numbers.splice(i,1));
+        let secondNo=parseFloat(numbers[i]);
+        numbers[i]=firstNo/secondNo;
+        i--;
+      }
+      else if(symbols[i]==='x'){
+        symbols.splice(i,1);
+        let firstNo=parseFloat(numbers.splice(i,1));
+        let secondNo=parseFloat(numbers[i]);
+        numbers[i]=firstNo*secondNo;
+        i--;
+      }
+      
+    }
+
+
+    for(let i=0;i<symbols.length;i++){
+      if(symbols[i]==='+'){
+        symbols.splice(i,1);
+        let firstNo=parseFloat(numbers.splice(i,1));
+        let secondNo=parseFloat(numbers[i]);
+        numbers[i]=firstNo+secondNo;
+        i--;
+      }
+      else if(symbols[i]==='-'){
+        symbols.splice(i,1);
+        let firstNo=parseFloat(numbers.splice(i,1));
+        let secondNo=parseFloat(numbers[i]);
+        numbers[i]=firstNo-secondNo;
+        i--;
+      }
+    }
+
+    this.state.expression=numbers[0];
   }
   render(){
     return(

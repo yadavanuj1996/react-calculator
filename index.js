@@ -22,6 +22,17 @@ class Calculator extends React.Component{
                 return;
       case '=': this.showResults();
                 return;
+      case '.': 
+      // if expression contains no arithmetic symbol +,-,/,x
+      if(!(/(?=[\-\+\x\/])/i.test(this.state.expression))){
+        if(/\d+\.\d*$/g.test(this.state.expression))
+          return ;
+      }
+      // if expression contains one or more than one arithmetic symbol +,-,/,x
+      else if(/([\+\-\/\x]\d+\.\d*$)/g.test(this.state.expression)){
+        return;
+      }
+             //   /(?=[\-\+\x\/])/i.test
     }
     if(this.state.expression==0 && !this.isInputCharacterSymbol(clickedButton))
       this.setState({expression: `${clickedButton}`});

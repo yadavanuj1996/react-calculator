@@ -23,16 +23,25 @@ class Calculator extends React.Component{
       case '=': this.showResults();
                 return;
       case '.': 
-      // if expression contains no arithmetic symbol +,-,/,x
-      if(!(/(?=[\-\+\x\/])/i.test(this.state.expression))){
-        if(/\d+\.\d*$/g.test(this.state.expression))
-          return ;
-      }
-      // if expression contains one or more than one arithmetic symbol +,-,/,x
-      else if(/([\+\-\/\x]\d+\.\d*$)/g.test(this.state.expression)){
-        return;
-      }
-             //   /(?=[\-\+\x\/])/i.test
+        // if expression contains no arithmetic symbol +,-,/,x
+        if(!(/(?=[\-\+\x\/])/i.test(this.state.expression))){
+          if(/\d+\.\d*$/g.test(this.state.expression))
+            return ;
+        }
+        // if expression contains one or more than one arithmetic symbol +,-,/,x
+        else if(/([\+\-\/\x]\d+\.\d*$)/g.test(this.state.expression)){
+          return;
+        }
+        break;
+      case 'x':
+      case '/':
+      case '+':
+     
+        if(this.isInputCharacterSymbol(this.state.expression.slice(-1))){
+          this.setState({expression: `${this.state.expression.slice(0,this.state.expression.length-1)}${clickedButton}`});
+          return;
+        }
+        break;
     }
     if(this.state.expression==0 && !this.isInputCharacterSymbol(clickedButton))
       this.setState({expression: `${clickedButton}`});
@@ -47,8 +56,8 @@ class Calculator extends React.Component{
     this.props.submitExpression(this.state.expression); 
   }
   evaluateExpression(){
-    var numRegExp = /(\d+[.]\d+)|(\d+)/g;
-    var symbolsRegExp=/[\+\-\x\/]/g;
+    var numRegExp = /(\d+[\.]\d+)|(\d+)/g;
+    var symbolsRegExp=/[\+\-\x\/]{1,2}/g;
     var regString = this.state.expression;
     
 
@@ -56,40 +65,53 @@ class Calculator extends React.Component{
     var symbols=(regString.match(symbolsRegExp));
 
     for(let i=0;i<symbols.length;i++){
+      let multiplyingFactor=1;
+      if(symbols[i].length===2 && (symbols[i].slice(0,1)==='/' || symbols[i].slice(0,1)==='x')){
+      	symbols[i]=symbols[i].slice(0,1);
+        multiplyingFactor=-1;
+      }
+      
       if(symbols[i]==='/'){
         symbols.splice(i,1);
         let firstNo=parseFloat(numbers.splice(i,1));
         let secondNo=parseFloat(numbers[i]);
-        numbers[i]=firstNo/secondNo;
+        numbers[i]=(firstNo/secondNo)*multiplyingFactor;
         i--;
       }
       else if(symbols[i]==='x'){
         symbols.splice(i,1);
         let firstNo=parseFloat(numbers.splice(i,1));
         let secondNo=parseFloat(numbers[i]);
-        numbers[i]=firstNo*secondNo;
+        numbers[i]=(firstNo*secondNo)*multiplyingFactor;
         i--;
       }
       
     }
-
-
+   
     for(let i=0;i<symbols.length;i++){
+      let multiplyingFactor=1;
+      if(symbols[i].length===2 && (symbols[i].slice(0,1)==='+' || symbols[i].slice(0,1)==='-')){
+      	symbols[i]=symbols[i].slice(0,1);
+        multiplyingFactor=-1;
+      }
+      
       if(symbols[i]==='+'){
         symbols.splice(i,1);
         let firstNo=parseFloat(numbers.splice(i,1));
         let secondNo=parseFloat(numbers[i]);
-        numbers[i]=firstNo+secondNo;
+        numbers[i]=firstNo+(secondNo*multiplyingFactor);
         i--;
       }
       else if(symbols[i]==='-'){
         symbols.splice(i,1);
         let firstNo=parseFloat(numbers.splice(i,1));
         let secondNo=parseFloat(numbers[i]);
-        numbers[i]=firstNo-secondNo;
+        numbers[i]=firstNo-(secondNo*multiplyingFactor);
         i--;
       }
     }
+	
+   
 
     this.state.expression=numbers[0];
   }

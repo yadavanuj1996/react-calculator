@@ -6,6 +6,7 @@ import {createStore} from 'redux';
 import {connect} from 'react-redux';
 import {Provider} from 'react-redux';
 
+
 class Calculator extends React.Component{
   constructor(props){
     super(props);
@@ -23,26 +24,34 @@ class Calculator extends React.Component{
       case '=': this.showResults();
                 return;
       case '.': 
-        // if expression contains no arithmetic symbol +,-,/,x
-        if(!(/(?=[\-\+\x\/])/i.test(this.state.expression))){
-          if(/\d+\.\d*$/g.test(this.state.expression))
-            return ;
-        }
-        // if expression contains one or more than one arithmetic symbol +,-,/,x
-        else if(/([\+\-\/\x]\d+\.\d*$)/g.test(this.state.expression)){
-          return;
-        }
-        break;
+      // if expression contains no arithmetic symbol +,-,/,x
+      if(!(/(?=[\-\+\x\/])/i.test(this.state.expression))){
+        if(/\d+\.\d*$/g.test(this.state.expression))
+          return ;
+      }
+      // if expression contains one or more than one arithmetic symbol +,-,/,x
+      else if(/([\+\-\/\x]\d+\.\d*$)/g.test(this.state.expression)){
+        return;
+      }
+      break;
       case 'x':
       case '/':
       case '+':
-     
         if(this.isInputCharacterSymbol(this.state.expression.slice(-1))){
-          this.setState({expression: `${this.state.expression.slice(0,this.state.expression.length-1)}${clickedButton}`});
+          let reducingFactor=1;
+          if(this.isInputCharacterSymbol(this.state.expression.slice(-2,-1))){
+             reducingFactor++;
+             }
+          
+          this.setState({expression: `${this.state.expression.slice(0,this.state.expression.length-reducingFactor)}${clickedButton}`});
           return;
         }
         break;
+   
+       
     }
+    
+    
     if(this.state.expression==0 && !this.isInputCharacterSymbol(clickedButton))
       this.setState({expression: `${clickedButton}`});
     else 
@@ -55,7 +64,7 @@ class Calculator extends React.Component{
     this.evaluateExpression();
     this.props.submitExpression(this.state.expression); 
   }
-  evaluateExpression(){
+   evaluateExpression(){
     var numRegExp = /(\d+[\.]\d+)|(\d+)/g;
     var symbolsRegExp=/[\+\-\x\/]{1,2}/g;
     var regString = this.state.expression;
@@ -113,8 +122,9 @@ class Calculator extends React.Component{
 	
    
 
-    this.state.expression=numbers[0];
+    this.setState({expression: `${numbers[0]}`});
   }
+  
   render(){
     return(
       <CalcNumbers expression={this.state.expression} handleClick={this.handleClick}/>

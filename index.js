@@ -13,9 +13,99 @@ class Calculator extends React.Component {
     this.state = { expression: "0" };
     this.handleClick = this.handleClick.bind(this);
     this.showResults = this.showResults.bind(this);
+    this.handleKeyPress=this.handleKeyPress.bind(this);
   }
+  componentDidMount() {
+    document.addEventListener("keydown", this.handleKeyPress);
+  }
+  componentWillUnMount() {
+    document.removeEventListener("keydown", this.handleKeyPress);
+  }
+   handleKeyPress(event) {
+    switch (event.keyCode) {
+      case 48:
+      case 96:
+        this.raiseHandleClickOnKeyType("zero");
+        break;
+      case 49:
+      case 97:
+        this.raiseHandleClickOnKeyType("one");
+        break;
+      case 50:  
+      case 98:
+        this.raiseHandleClickOnKeyType("two");
+        break;
+      case 51:  
+      case 99:
+        this.raiseHandleClickOnKeyType("three");
+        break;
+      case 52:  
+      case 100:
+        this.raiseHandleClickOnKeyType("four");
+        break;
+      case 53:  
+      case 101:
+        this.raiseHandleClickOnKeyType("five");
+        break;
+      case 54:  
+      case 102:
+        this.raiseHandleClickOnKeyType("six");
+        break;
+      case 55:  
+      case 103:
+        this.raiseHandleClickOnKeyType("seven");
+        break;
+      case 56:
+      case 104:
+        this.raiseHandleClickOnKeyType("eight");
+        break;
+      case 57:  
+      case 105:
+        this.raiseHandleClickOnKeyType("nine");
+        break;
+      case 13: 
+      case 187:
+        this.raiseHandleClickOnKeyType("equals");
+        break;
+      case 107:  
+        this.raiseHandleClickOnKeyType("add");
+        break;
+      case 109:  
+      case 189:
+        this.raiseHandleClickOnKeyType("subtract");
+        break;
+      case 106:
+      case 88:
+        this.raiseHandleClickOnKeyType("multiply");
+        break;
+      case 111:  
+      case 191:
+        this.raiseHandleClickOnKeyType("divide");
+        break;
+      case 110:  
+      case 190:
+        this.raiseHandleClickOnKeyType("decimal");
+        break;
+      case 8:
+        this.raiseHandleClickOnKeyType("backspace");
+        break;
+      case 46:
+        this.raiseHandleClickOnKeyType("clear");
+        break;
+    }
+  }
+  raiseHandleClickOnKeyType(id){
+    let keyboardPressFakeEvent={target:{id: id}}
+    this.handleClick(keyboardPressFakeEvent);
+  }
+  
   handleClick(event) {
     let clickedButton = document.getElementById(event.target.id).innerHTML;
+     document.getElementById(event.target.id).classList.add("button-press-effect");
+     let eventElementId=event.target.id;
+     setTimeout(function(){
+      document.getElementById(eventElementId).classList.remove("button-press-effect");
+     },300);
     switch (clickedButton.toString()) {
       case "AC":
         this.setState({ expression: "0" });
@@ -170,7 +260,7 @@ class Calculator extends React.Component {
       <CalcNumbers
         expression={this.state.expression}
         handleClick={this.handleClick}
-      />
+      />      
     );
   }
 }
@@ -181,7 +271,7 @@ class CalcNumbers extends React.Component {
 
   render() {
     return (
-      <div className="row w-100 justify-content-center">
+      <div id="calcInnerStartDiv" className="row w-100 justify-content-center calcInnerStartDiv-theme">
         <CalcTopElements
           expression={this.props.expression}
           handleClick={this.props.handleClick}
@@ -202,7 +292,7 @@ class CalcTopElements extends React.Component {
       <div className="row w-100 ">
         <div
           id="display"
-          className="row w-100 justify-content-end align-items-center"
+          className="row w-100 justify-content-end align-items-center theme-display"
         >
           {this.props.expression}
         </div>
@@ -263,7 +353,7 @@ class CalcMiddleElements extends React.Component {
       );
     });
     return (
-      <div className="row justify-content-center w-100 h-100">{digitDiv}</div>
+      <div className="row justify-content-center w-100">{digitDiv}</div>
     );
   }
 }
@@ -319,6 +409,7 @@ const reducer = (state = DEFAULT_STATE, action) => {
 };
 
 
+
 const store=createStore(reducer);
 
 const mapStateToProps = state => {
@@ -348,3 +439,42 @@ class AppWrapper extends React.Component {
   }
 }
 ReactDOM.render(<AppWrapper />, document.getElementById("keypad"));
+
+
+class ThemeButton extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  themeChange(){
+    document.getElementById("keypad").classList.remove("keypad-theme");
+              document.getElementById("calcInnerStartDiv").classList.remove("calcInnerStartDiv-theme");
+    document.getElementById("display").classList.remove("theme-display");
+    document.getElementById("display").classList.add("theme-2-display");
+    
+    
+     document.getElementById("calc").classList.remove("theme-calc-width");
+     document.getElementById("calc").classList.add("theme-2-calc-width");
+    
+    
+    document.getElementsByTagName("BODY")[0].classList.remove("theme-1-body-background");
+    document.getElementsByTagName("BODY")[0].classList.add("theme-2-body-background");
+   ["zero","one","two","three","four","five","six","seven","eight","nine","multiply","add","subtract","divide","equals","decimal","clear","backspace"].map((element)=>{
+     document.getElementById(element).classList.remove("theme-bg-color");
+     document.getElementById(element).classList.add("theme-2-bg-color");
+     document.getElementById(element).classList.remove("calc-btn-height");
+     document.getElementById(element).classList.add("theme-2-calc-btn-height");
+     document.getElementById(element).classList.remove("calc-btn-border");
+     document.getElementById(element).classList.add("theme-2-calc-btn-border");
+     
+     
+   });
+    
+  }
+  render() {
+    return (
+        <button onClick={this.themeChange} class="col col-8 " id="button-theme">Change Theme</button>
+    );
+  }
+}
+
+ReactDOM.render(<ThemeButton />, document.getElementById("theme-btn-holder"));
